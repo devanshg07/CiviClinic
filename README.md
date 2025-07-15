@@ -1,6 +1,6 @@
-# CiviClinic: Wound & Disease Classification with Deep Learning
+# CiviClinic: AI-Powered Healthcare Access for JAMHacks 9
 
-A full-stack medical image and symptom recognition application that uses deep learning for wound image classification and machine learning for disease prediction, with a modern interface for healthcare support.
+CiviClinic bridges patients and doctors with AI-powered symptom checks, smart wound analysis, and intelligent doctor matching. Instantly assess health, scan injuries, and find care nearby—reducing unnecessary ER visits and making healthcare more accessible. Modern Python/Flask app with machine learning, GPT-powered symptom analysis, and real medical data.
 
 ## 🎯 How It Works
 
@@ -101,6 +101,9 @@ CiviClinic/
 - **Wound Classification**: Deep ResNet50 model, multiple wound types
 - **Disease Prediction**: Random Forest, multi-symptom input
 - **Robust Preprocessing**: Handles various image and symptom formats
+- **GPT-3.5 Symptom Analysis**: Instant health assessments
+- **Doctor Matching**: Connects users to care based on symptoms/location
+- **Healthcare Map**: Find nearby clinics and facilities
 
 ## 🔧 Customization
 

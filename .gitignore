@@ -4,3 +4,12 @@
 users.db
 doctors.db
 .env
+*.pkl
+*.pickle
+*.db
+*.db-journal
+*.db-lock
+*.db-trace
+*.db-wal
+*.db-shm
+*.db-journal
