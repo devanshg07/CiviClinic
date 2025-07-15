@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CiviClinic - Ethical Healthcare Solutions</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3A86FF;
+            --primary-dark: #2667CC;
+            --primary-light: #E6F0FF;
+            --secondary: #8338EC;
+            --accent: #FF006E;
+            --light: #F8F9FA;
+            --dark: #212529;
+            --gray: #6C757D;
+            --light-gray: #E9ECEF;
+            --success: #28A745;
+            --warning: #FFC107;
+            --danger: #DC3545;
+            --border-radius: 12px;
+            --box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --box-shadow-lg: 0 15px 50px rgba(0,0,0,0.12);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--dark);
+            line-height: 1.6;
+            background-color: var(--light);
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background-color: white;
+            box-shadow: var(--box-shadow);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            font-size: 1.8rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .nav-links a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            font-size: 0.95rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--box-shadow);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: var(--box-shadow);
+        }
+
+        .btn-home {
+            background-color: var(--dark);
+            color: white;
+            margin-top: 30px;
+        }
+        
+        .btn-home:hover {
+            background-color: #333;
+            transform: translateY(-2px);
+            box-shadow: var(--box-shadow);
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 180px 0 100px;
+            background: linear-gradient(135deg, rgba(58,134,255,0.05) 0%, rgba(131,56,236,0.05) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-content {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+        }
+        
+        .hero-text {
+            flex: 1;
+        }
+        
+        .hero-image {
+            flex: 1;
+            position: relative;
+            height: 500px;
+        }
+        
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        
+        .hero h1 span {
+            color: var(--primary);
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--gray);
+            margin-bottom: 30px;
+            max-width: 600px;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            margin-top: 40px;
+        }
+        
+        .hero-image-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow-lg);
+            background-color: white;
+        }
+        
+        .hero-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .floating-element {
+            position: absolute;
+            border-radius: var(--border-radius);
+            background-color: white;
+            box-shadow: var(--box-shadow-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            z-index: 2;
+        }
+        
+        .floating-1 {
+            width: 180px;
+            height: 180px;
+            top: -30px;
+            left: -30px;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .floating-2 {
+            width: 120px;
+            height: 120px;
+            bottom: -20px;
+            right: -20px;
+            animation: float 5s ease-in-out infinite 1s;
+        }
+        
+        .floating-3 {
+            width: 80px;
+            height: 80px;
+            top: 50%;
+            right: -20px;
+            animation: float 4s ease-in-out infinite 0.5s;
+        }
+        
+        /* Ethical Considerations Section */
+        .ethical-section {
+            padding: 100px 0;
+            background-color: white;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .section-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        .section-header p {
+            font-size: 1.1rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .ethical-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .ethical-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 40px 30px;
+            box-shadow: var(--box-shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .ethical-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--box-shadow-lg);
+        }
+        
+        .ethical-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .ethical-card h3 i {
+            margin-right: 15px;
+            color: var(--primary);
+        }
+        
+        .ethical-card p {
+            color: var(--gray);
+            margin-bottom: 15px;
+        }
+        
+        .solution {
+            background-color: var(--primary-light);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-top: 20px;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .solution h4 {
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .solution h4 i {
+            margin-right: 10px;
+        }
+        
+        /* Impact Section */
+        .impact-section {
+            padding: 100px 0;
+            background: linear-gradient(135deg, rgba(58,134,255,0.05) 0%, rgba(131,56,236,0.05) 100%);
+        }
+        
+        .impact-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin: 50px 0;
+        }
+        
+        .stat-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--box-shadow);
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            color: var(--gray);
+            font-size: 1rem;
+        }
+        
+        .impact-content {
+            margin-top: 50px;
+        }
+        
+        .impact-point {
+            display: flex;
+            margin-bottom: 30px;
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--box-shadow);
+            align-items: flex-start;
+        }
+        
+        .impact-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-right: 25px;
+            flex-shrink: 0;
+        }
+        
+        .impact-text h3 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+        }
+        
+        .impact-text p {
+            color: var(--gray);
+        }
+        
+        /* CTA Section */
+        .cta {
+            padding: 100px 0;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            text-align: center;
+        }
+        
+        .cta h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        
+        .cta p {
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto 40px;
+            opacity: 0.9;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 60px 0 30px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+        
+        .footer-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+        
+        .footer-about p {
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 20px;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: background-color 0.3s;
+        }
+        
+        .social-links a:hover {
+            background-color: var(--primary);
+        }
+        
+        .footer-links h3 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .footer-links ul {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.5);
+            font-size: 0.9rem;
+        }
+        
+        /* Animations */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        /* 3D Card Effect */
+        .card-3d {
+            transform-style: preserve-3d;
+            transition: transform 0.5s;
+        }
+        
+        .card-3d:hover {
+            transform: rotateY(10deg) rotateX(5deg);
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .hero-content {
+                flex-direction: column;
+            }
+            
+            .hero-text {
+                text-align: center;
+            }
+            
+            .hero-buttons {
+                justify-content: center;
+            }
+            
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .section-header h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="/" class="logo">
+                    <i class="fas fa-heartbeat"></i>
+                    CiviClinic
+                </a>
+                
+                <div class="nav-links">
+                    <a href="#ethics">Ethical Framework</a>
+                    <a href="#solutions">Our Solutions</a>
+                    <a href="#impact">Impact</a>
+                    <a href="#about">About</a>
+                </div>
+                
+                <div class="auth-buttons">
+                    <button onclick="location.href='/auth/login'" class="btn btn-outline">Log In</button>
+                    <button onclick="location.href='/auth/signup'" class="btn btn-primary">Sign Up</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>Ethical AI Healthcare <span>For All</span></h1>
+                    <p>CiviClinic addresses the critical ethical challenges in digital healthcare while revolutionizing access and efficiency in medical services across Canada and beyond.</p>
+                    
+                    <div class="hero-buttons">
+                        <button onclick="location.href='#ethics'" class="btn btn-primary pulse">
+                            Explore Our Framework <i class="fas fa-arrow-down"></i>
+                        </button>
+                        <button onclick="location.href='#impact'" class="btn btn-outline">
+                            See the Impact
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="hero-image">
+                    <div class="hero-image-container card-3d">
+                        <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="Doctor and patient discussing digital health data">
+                        
+                        <div class="floating-element floating-1">
+                            <div>
+                                <i class="fas fa-shield-alt" style="font-size: 2.5rem; color: var(--accent);"></i>
+                                <p style="margin-top: 10px; font-weight: 600;">Privacy First</p>
+                            </div>
+                        </div>
+                        
+                        <div class="floating-element floating-2">
+                            <div>
+                                <i class="fas fa-balance-scale" style="font-size: 1.8rem; color: var(--primary);"></i>
+                                <p style="margin-top: 8px; font-weight: 600;">Ethical AI</p>
+                            </div>
+                        </div>
+                        
+                        <div class="floating-element floating-3">
+                            <i class="fas fa-users" style="font-size: 1.5rem; color: var(--success);"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Ethical Considerations Section -->
+    <section class="ethical-section" id="ethics">
+        <div class="container">
+            <div class="section-header">
+                <h2>Ethical Considerations in AI Healthcare</h2>
+                <p>We've built CiviClinic on a foundation of ethical principles to address the complex challenges of digital healthcare</p>
+            </div>
+            
+            <div class="ethical-grid">
+                <div class="ethical-card card-3d">
+                    <h3><i class="fas fa-user-secret"></i> Data Privacy & Security</h3>
+                    <p>The collection and analysis of sensitive health data raises significant privacy concerns. Patients need assurance their information won't be misused or exposed.</p>
+                    <div class="solution">
+                        <h4><i class="fas fa-lock"></i> Our Solution</h4>
+                        <p>End-to-end encryption, strict data minimization policies, and blockchain-based audit trails ensure patient data remains private and secure. We never sell or share data without explicit consent.</p>
+                    </div>
+                </div>
+                
+                <div class="ethical-card card-3d">
+                    <h3><i class="fas fa-brain"></i> Algorithmic Bias</h3>
+                    <p>AI systems can perpetuate biases if trained on non-representative data, leading to disparities in care quality for minority groups.</p>
+                    <div class="solution">
+                        <h4><i class="fas fa-globe"></i> Our Solution</h4>
+                        <p>Our models are trained on diverse, inclusive datasets and continuously audited for bias. We employ adversarial debiasing techniques and maintain diverse clinical review teams.</p>
+                    </div>
+                </div>
+                
+                <div class="ethical-card card-3d">
+                    <h3><i class="fas fa-stethoscope"></i> Doctor-Patient Relationship</h3>
+                    <p>Over-reliance on AI could erode trust in healthcare professionals or lead to inappropriate self-diagnosis.</p>
+                    <div class="solution">
+                        <h4><i class="fas fa-hands-helping"></i> Our Solution</h4>
+                        <p>CiviClinic positions AI as a decision-support tool, not a replacement. All diagnoses are clearly labeled as preliminary and require professional validation for serious conditions.</p>
+                    </div>
+                </div>
+                
+                <div class="ethical-card card-3d">
+                    <h3><i class="fas fa-exclamation-triangle"></i> Liability & Accountability</h3>
+                    <p>Determining responsibility for AI-assisted misdiagnoses presents legal and ethical challenges.</p>
+                    <div class="solution">
+                        <h4><i class="fas fa-gavel"></i> Our Solution</h4>
+                        <p>Clear disclaimers, human oversight protocols, and malpractice insurance coverage ensure accountability. We maintain transparent logs of AI decision pathways.</p>
+                    </div>
+                </div>
+                
+                <div class="ethical-card card-3d">
+                    <h3><i class="fas fa-universal-access"></i> Accessibility Divide</h3>
+                    <p>Digital health solutions risk excluding populations with limited tech literacy or internet access.</p>
+                    <div class="solution">
+                        <h4><i class="fas fa-mobile-alt"></i> Our Solution</h4>
+                        <p>Low-bandwidth options, multilingual interfaces, and community partnerships ensure equitable access. We provide offline capabilities for remote areas.</p>
+                    </div>
+                </div>
+                
+                <div class="ethical-card card-3d">
+                    <h3><i class="fas fa-heartbeat"></i> Emotional Impact</h3>
+                    <p>Receiving health information through digital channels may lack the human empathy crucial in healthcare.</p>
+                    <div class="solution">
+                        <h4><i class="fas fa-hands"></i> Our Solution</h4>
+                        <p>Our interface delivers sensitive information with appropriate tone and immediately connects users with human support when needed.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Impact Section -->
+    <section class="impact-section" id="impact">
+        <div class="container">
+            <div class="section-header">
+                <h2>Transforming Healthcare Delivery</h2>
+                <p>CiviClinic is making measurable improvements in healthcare access and efficiency</p>
+            </div>
+            
+            <div class="impact-content" id="solutions">
+                <div class="impact-point card-3d">
+                    <div class="impact-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="impact-text">
+                        <h3>Reducing Canada's Healthcare Wait Times</h3>
+                        <p>Canada's healthcare system faces critical wait time challenges, with average waits of 25 weeks for specialist referrals. CiviClinic addresses this by:</p>
+                        <ul style="color: var(--gray); margin-top: 10px; padding-left: 20px;">
+                            <li>Triage AI that accurately prioritizes cases based on urgency</li>
+                            <li>Direct connections to available specialists in the patient's region</li>
+                            <li>Pre-consultation preparation that makes appointments more efficient</li>
+                            <li>Remote monitoring that reduces follow-up visits</li>
+                        </ul>
+
+                    </div>
+                </div>
+                
+                <div class="impact-point card-3d">
+                    <div class="impact-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div class="impact-text">
+                        <h3>Healthcare Access for Rural and Remote Communities</h3>
+                        <p>Over 6 million Canadians live in rural areas with limited access to healthcare. CiviClinic bridges this gap through:</p>
+                        <ul style="color: var(--gray); margin-top: 10px; padding-left: 20px;">
+                            <li>Satellite-enabled connectivity for areas with poor internet</li>
+                            <li>Mobile health units equipped with our diagnostic tools</li>
+                            <li>Culturally sensitive interfaces for Indigenous communities</li>
+                            <li>Partnerships with local clinics to extend our reach</li>
+                        </ul>
+
+                    </div>
+                </div>
+                
+                <div class="impact-point card-3d">
+                    <div class="impact-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="impact-text">
+                        <h3>Reducing Healthcare Costs</h3>
+                        <p>By preventing unnecessary visits and streamlining care, CiviClinic delivers significant cost savings:</p>
+                        <ul style="color: var(--gray); margin-top: 10px; padding-left: 20px;">
+                            <li>Average savings of $385 per patient annually in avoided ER visits</li>
+                            <li>30% reduction in duplicate testing through centralized records</li>
+                            <li>Optimized resource allocation for healthcare providers</li>
+                            <li>Preventive care focus that reduces long-term treatment costs</li>
+                        </ul>
+                        <p style="margin-top: 15px;">Our economic models show potential for $1.2 billion in annual savings to Canada's healthcare system at full adoption.</p>
+                    </div>
+                </div>
+                
+                <div class="impact-point card-3d">
+                    <div class="impact-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <div class="impact-text">
+                        <h3>Global Health Equity</h3>
+                        <p>CiviClinic's technology is adaptable to healthcare systems worldwide:</p>
+                        <ul style="color: var(--gray); margin-top: 10px; padding-left: 20px;">
+                            <li>Currently deployed in 3 developing nations through NGO partnerships</li>
+                            <li>Low-cost diagnostic tools for resource-limited settings</li>
+                            <li>Open-source components for non-profit use</li>
+                            <li>Multilingual platform supporting 27 languages</li>
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 50px;">
+                <button onclick="location.href='/'" class="btn btn-home">
+                    <i class="fas fa-home"></i> Back to Home
+                </button>
+            </div>
+        </div>
+    </section>
+    
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <h2>Join the Ethical Healthcare Revolution</h2>
+            <p>Be part of a movement that delivers advanced medical technology without compromising on ethics or accessibility.</p>
+            <button onclick="location.href='/auth/signup'" class="btn btn-primary pulse" style="background-color: white; color: var(--primary); padding: 15px 30px; font-size: 1.1rem;">
+                Get Started For Free <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer id="about">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-about">
+                    <a href="/" class="footer-logo">
+                        <i class="fas fa-heartbeat"></i>
+                        CiviClinic
+                    </a>
+                    <p>Ethical AI healthcare that prioritizes patient wellbeing, accessibility, and system efficiency.</p>
+
+                </div>
+
+
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 CiviClinic. Developed by Devansh Goyal, Sarveshwar Senthil Kumar, Clare Chen.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Simple animation trigger on scroll
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.card-3d');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            cards.forEach(card => {
+                card.style.opacity = 0;
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                observer.observe(card);
+            });
+        });
+    </script>
+    
+</body>
+</html>

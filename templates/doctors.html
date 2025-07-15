@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Doctors | CiviClinic</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+    <style>
+        :root {
+            --primary: #3A86FF;
+            --primary-dark: #2667CC;
+            --primary-light: #E6F0FF;
+            --secondary: #8338EC;
+            --accent: #FF006E;
+            --light: #F8F9FA;
+            --dark: #212529;
+            --gray: #6C757D;
+            --light-gray: #E9ECEF;
+            --success: #28A745;
+            --warning: #FFC107;
+            --danger: #DC3545;
+            --border-radius: 12px;
+            --box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--dark);
+            line-height: 1.6;
+            background-color: var(--light);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background-color: white;
+            box-shadow: var(--box-shadow);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            font-size: 1.8rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .nav-links a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        /* Search Section */
+        .search-section {
+            padding: 120px 0 40px;
+            background-color: white;
+        }
+        
+        .search-container {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 12px 20px;
+            border: 1px solid var(--light-gray);
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+        
+        .search-select {
+            padding: 12px 20px;
+            border: 1px solid var(--light-gray);
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            background-color: white;
+            min-width: 200px;
+        }
+        
+        /* Map Section */
+        .map-section {
+            margin-bottom: 40px;
+        }
+        
+        #doctors-map {
+            height: 500px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            background-color: white;
+        }
+        
+        /* Doctors Grid */
+        .doctors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        
+        .doctor-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--box-shadow);
+            transition: transform 0.3s;
+        }
+        
+        .doctor-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .doctor-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .doctor-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .doctor-info h3 {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+        
+        .doctor-info p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .doctor-details {
+            margin-bottom: 20px;
+        }
+        
+        .doctor-details p {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .doctor-details i {
+            color: var(--primary);
+            width: 20px;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            font-size: 1rem;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--box-shadow);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: var(--box-shadow);
+        }
+        
+        @media (max-width: 768px) {
+            .search-container {
+                flex-direction: column;
+            }
+            
+            .search-select {
+                width: 100%;
+            }
+            
+            #doctors-map {
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="/" class="logo">
+                    <i class="fas fa-heartbeat"></i>
+                    CiviClinic
+                </a>
+                
+                <div class="nav-links">
+                    <a href="/dashboard">Dashboard</a>
+                </div>
+                
+                <div class="user-menu">
+                    <a href="/auth/logout" class="btn btn-outline">Log Out</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- Search Section -->
+    <section class="search-section">
+        <div class="container">
+            <div class="search-container">
+                <input type="text" id="location-search" class="search-input" placeholder="Enter location..." value="{{ current_location }}">
+                <select id="specialty-filter" class="search-select">
+                    <option value="">All Specialties</option>
+                    {% for specialty in specialties %}
+                    <option value="{{ specialty }}" {% if specialty == current_specialty %}selected{% endif %}>{{ specialty }}</option>
+                    {% endfor %}
+                </select>
+                <button class="btn btn-primary" id="search-btn">Search</button>
+            </div>
+            
+            <div id="doctors-map"></div>
+        </div>
+    </section>
+    
+    <!-- Doctors Grid -->
+    <section class="doctors-section">
+        <div class="container">
+            <div class="doctors-grid">
+                {% for doctor in doctors %}
+                <div class="doctor-card">
+                    <div class="doctor-header">
+                        <div class="doctor-avatar">
+                            {{ doctor.name[0] }}
+                        </div>
+                        <div class="doctor-info">
+                            <h3>Dr. {{ doctor.name }}</h3>
+                            <p>{{ doctor.specialty }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="doctor-details">
+                        <p><i class="fas fa-map-marker-alt"></i> {{ doctor.address }}, {{ doctor.city }}</p>
+                        <p><i class="fas fa-phone"></i> {{ doctor.phoneNumber }}</p>
+                        <p><i class="fas fa-envelope"></i> {{ doctor.emailaddress }}</p>
+                        <p><i class="fas fa-graduation-cap"></i> {{ doctor.degrees_certifications }}</p>
+                        <p><i class="fas fa-hospital"></i> {{ doctor.hospital_affiliation }}</p>
+                        <p><i class="fas fa-language"></i> {{ doctor.languages_spoken }}</p>
+                    </div>
+                    
+                    <a href="/doctors/profile/{{ doctor.userID }}" class="btn btn-primary" style="width: 100%;">View Profile</a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script>
+        // Initialize map
+        const map = L.map('doctors-map').setView([43.6532, -79.3832], 13);
+        
+        // Add tile layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+        
+        // Get user's location
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const userLat = position.coords.latitude;
+                    const userLng = position.coords.longitude;
+                    
+                    // Center map on user's location
+                    map.setView([userLat, userLng], 13);
+                    
+                    // Add user marker
+                    L.marker([userLat, userLng], {
+                        icon: L.divIcon({
+                            className: 'user-location-marker',
+                            html: '<div style="background-color: var(--primary); width: 20px; height: 20px; border-radius: 50%; border: 3px solid white;"></div>',
+                            iconSize: [20, 20]
+                        })
+                    }).addTo(map)
+                    .bindPopup('Your Location')
+                    .openPopup();
+                },
+                (error) => {
+                    console.error("Error getting location:", error);
+                }
+            );
+        }
+        
+        // Search functionality
+        const locationSearch = document.getElementById('location-search');
+        const specialtyFilter = document.getElementById('specialty-filter');
+        const searchBtn = document.getElementById('search-btn');
+        
+        function updateDoctors() {
+            const location = locationSearch.value;
+            const specialty = specialtyFilter.value;
+            
+            // Update URL with search parameters
+            const url = new URL(window.location);
+            url.searchParams.set('location', location);
+            url.searchParams.set('specialty', specialty);
+            window.history.pushState({}, '', url);
+            
+            // Fetch and update doctors
+            fetch(`/doctors/search?location=${encodeURIComponent(location)}&specialty=${encodeURIComponent(specialty)}`)
+                .then(response => response.json())
+                .then(doctors => {
+                    // Update doctors grid
+                    const doctorsGrid = document.querySelector('.doctors-grid');
+                    doctorsGrid.innerHTML = doctors.map(doctor => `
+                        <div class="doctor-card">
+                            <div class="doctor-header">
+                                <div class="doctor-avatar">
+                                    ${doctor.name[0]}
+                                </div>
+                                <div class="doctor-info">
+                                    <h3>Dr. ${doctor.name}</h3>
+                                    <p>${doctor.specialty}</p>
+                                </div>
+                            </div>
+                            
+                            <div class="doctor-details">
+                                <p><i class="fas fa-map-marker-alt"></i> ${doctor.address}, ${doctor.city}</p>
+                                <p><i class="fas fa-phone"></i> ${doctor.phoneNumber}</p>
+                                <p><i class="fas fa-envelope"></i> ${doctor.emailaddress}</p>
+                                <p><i class="fas fa-graduation-cap"></i> ${doctor.degrees_certifications}</p>
+                                <p><i class="fas fa-hospital"></i> ${doctor.hospital_affiliation}</p>
+                                <p><i class="fas fa-language"></i> ${doctor.languages_spoken}</p>
+                            </div>
+                            
+                            <a href="/doctors/profile/${doctor.userID}" class="btn btn-primary" style="width: 100%;">View Profile</a>
+                        </div>
+                    `).join('');
+                    
+                    // Update map markers
+                    map.eachLayer((layer) => {
+                        if (layer instanceof L.Marker) {
+                            map.removeLayer(layer);
+                        }
+                    });
+                    
+                    doctors.forEach(doctor => {
+                        // Add marker for each doctor
+                        L.marker([doctor.lat, doctor.lng], {
+                            icon: L.divIcon({
+                                className: 'doctor-marker',
+                                html: '<div style="background-color: var(--accent); width: 16px; height: 16px; border-radius: 50%; border: 2px solid white;"></div>',
+                                iconSize: [16, 16]
+                            })
+                        }).addTo(map)
+                        .bindPopup(`
+                            <div class="doctor-info-window">
+                                <h3>Dr. ${doctor.name}</h3>
+                                <p><strong>Specialty:</strong> ${doctor.specialty}</p>
+                                <p><strong>Address:</strong> ${doctor.address}, ${doctor.city}</p>
+                                <a href="/doctors/profile/${doctor.userID}">View Profile</a>
+                            </div>
+                        `);
+                    });
+                });
+        }
+        
+        searchBtn.addEventListener('click', updateDoctors);
+        locationSearch.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                updateDoctors();
+            }
+        });
+        specialtyFilter.addEventListener('change', updateDoctors);
+    </script>
+</body>
+</html> 

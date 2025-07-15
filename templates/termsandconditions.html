@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CiviClinic - Terms and Conditions</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3A86FF;
+            --primary-dark: #2667CC;
+            --primary-light: #E6F0FF;
+            --secondary: #8338EC;
+            --accent: #FF006E;
+            --light: #F8F9FA;
+            --dark: #212529;
+            --gray: #6C757D;
+            --light-gray: #E9ECEF;
+            --success: #28A745;
+            --warning: #FFC107;
+            --danger: #DC3545;
+            --border-radius: 12px;
+            --box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --box-shadow-lg: 0 15px 50px rgba(0,0,0,0.12);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--dark);
+            line-height: 1.6;
+            background-color: var(--light);
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background-color: white;
+            box-shadow: var(--box-shadow);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            font-size: 1.8rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .nav-links a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            font-size: 0.95rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--box-shadow);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: var(--box-shadow);
+        }
+
+        .btn-home {
+            background-color: var(--dark);
+            color: white;
+            margin: 40px auto;
+            display: block;
+            max-width: 200px;
+            text-align: center;
+        }
+        
+        .btn-home:hover {
+            background-color: #333;
+            transform: translateY(-2px);
+            box-shadow: var(--box-shadow);
+        }
+        
+        /* Terms Content */
+        .terms-hero {
+            padding: 180px 0 60px;
+            background: linear-gradient(135deg, rgba(58,134,255,0.05) 0%, rgba(131,56,236,0.05) 100%);
+        }
+        
+        .terms-hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .terms-hero p {
+            font-size: 1.1rem;
+            color: var(--gray);
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 40px;
+        }
+        
+        .last-updated {
+            text-align: center;
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 40px;
+        }
+        
+        .terms-content {
+            background-color: white;
+            padding: 60px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-bottom: 60px;
+        }
+        
+        .terms-section {
+            margin-bottom: 40px;
+        }
+        
+        .terms-section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--primary-dark);
+        }
+        
+        .terms-section h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 25px 0 15px;
+            color: var(--dark);
+        }
+        
+        .terms-section p {
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+        
+        .terms-section ul {
+            margin-bottom: 20px;
+            padding-left: 20px;
+        }
+        
+        .terms-section li {
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        
+        .notice {
+            background-color: var(--primary-light);
+            border-left: 4px solid var(--primary);
+            padding: 20px;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+            margin: 25px 0;
+        }
+        
+        .notice strong {
+            color: var(--primary-dark);
+        }
+        
+        /* Simplified Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 60px 0 30px;
+            text-align: center;
+        }
+        
+        .footer-simple {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .footer-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .footer-logo i {
+            margin-right: 10px;
+        }
+        
+        .footer-tagline {
+            color: rgba(255,255,255,0.7);
+            max-width: 500px;
+            margin: 0 auto 30px;
+        }
+        
+        .footer-bottom {
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.5);
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .terms-hero {
+                padding: 150px 0 40px;
+            }
+            
+            .terms-hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .terms-content {
+                padding: 40px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .terms-hero {
+                padding: 120px 0 30px;
+            }
+            
+            .terms-hero h1 {
+                font-size: 2rem;
+            }
+            
+            .terms-hero p {
+                font-size: 1rem;
+            }
+            
+            .terms-content {
+                padding: 30px 20px;
+            }
+            
+            .terms-section h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="/" class="logo">
+                    <i class="fas fa-heartbeat"></i>
+                    CiviClinic
+                </a>
+                
+                <div class="nav-links">
+                    <a href="#acceptance">Acceptance</a>
+                    <a href="#service">Service</a>
+                    <a href="#privacy">Privacy</a>
+                    <a href="#liability">Liability</a>
+                </div>
+                
+                <div class="auth-buttons">
+                    <button onclick="location.href='/auth/login'" class="btn btn-outline">Log In</button>
+                    <button onclick="location.href='/auth/signup'" class="btn btn-primary">Sign Up</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- Terms Hero -->
+    <section class="terms-hero">
+        <div class="container">
+            <h1>Terms and Conditions</h1>
+            <p>Please read these terms carefully before using our services. By accessing or using CiviClinic, you agree to be bound by these terms.</p>
+            <div class="last-updated">Last Updated: January 1, 2025</div>
+        </div>
+    </section>
+    
+    <!-- Terms Content -->
+    <div class="container">
+        <div class="terms-content">
+            <div class="terms-section" id="acceptance">
+                <h2>1. Acceptance of Terms</h2>
+                <p>By accessing or using the CiviClinic platform ("Service"), you agree to be bound by these Terms and Conditions ("Terms"). If you do not agree to all of these Terms, do not use our Service.</p>
+                
+                <div class="notice">
+                    <strong>Important:</strong> These Terms contain provisions that limit our liability and require individual arbitration for disputes. Please review carefully.
+                </div>
+                
+                <h3>Eligibility</h3>
+                <p>You must be at least 18 years of age or the age of majority in your jurisdiction to use our Service. By using CiviClinic, you represent and warrant that you meet these requirements.</p>
+            </div>
+            
+            <div class="terms-section" id="service">
+                <h2>2. Description of Service</h2>
+                <p>CiviClinic provides an AI-powered healthcare platform that offers:</p>
+                <ul>
+                    <li>Preliminary health assessments using artificial intelligence</li>
+                    <li>Telemedicine services connecting users with licensed healthcare providers</li>
+                    <li>Health monitoring tools and personalized recommendations</li>
+                    <li>Appointment scheduling and healthcare provider directories</li>
+                </ul>
+                
+                <h3>Medical Disclaimer</h3>
+                <p>CiviClinic does not provide medical diagnosis or treatment. Our Service is for informational purposes only and is not a substitute for professional medical advice, diagnosis, or treatment.</p>
+                
+                <div class="notice">
+                    <strong>Emergency Notice:</strong> If you believe you may have a medical emergency, call your doctor or emergency services immediately. Do not rely on electronic communications for urgent medical needs.
+                </div>
+            </div>
+            
+            <div class="terms-section">
+                <h2>3. User Responsibilities</h2>
+                <p>When using CiviClinic, you agree to:</p>
+                <ul>
+                    <li>Provide accurate, current, and complete information</li>
+                    <li>Maintain the confidentiality of your account credentials</li>
+                    <li>Use the Service only for lawful purposes</li>
+                    <li>Not attempt to interfere with or disrupt the Service</li>
+                </ul>
+                
+                <h3>Prohibited Conduct</h3>
+                <p>You may not:</p>
+                <ul>
+                    <li>Use the Service to provide medical advice without proper credentials</li>
+                    <li>Reverse engineer, decompile, or disassemble any portion of the Service</li>
+                    <li>Use any automated means to access the Service without our permission</li>
+                    <li>Impersonate any person or entity or misrepresent your affiliation</li>
+                </ul>
+            </div>
+            
+            <div class="terms-section" id="privacy">
+                <h2>4. Privacy and Data Security</h2>
+                <p>Your privacy is important to us. Our Privacy Policy explains how we collect, use, and protect your personal information, including health data.</p>
+                
+                <h3>Health Information</h3>
+                <p>By using CiviClinic, you authorize us to:</p>
+                <ul>
+                    <li>Collect, store, and process your health information</li>
+                    <li>Share information with healthcare providers you choose to consult</li>
+                    <li>Use de-identified data to improve our services</li>
+                </ul>
+                
+                <p>We implement industry-standard security measures, but cannot guarantee absolute security of data transmitted over the internet.</p>
+            </div>
+            
+            <div class="terms-section">
+                <h2>5. Intellectual Property</h2>
+                <p>CiviClinic and all related content, features, and functionality are owned by us and protected by intellectual property laws.</p>
+                
+                <h3>License Grant</h3>
+                <p>We grant you a limited, non-exclusive, non-transferable license to access and use the Service for personal, non-commercial purposes.</p>
+                
+                <h3>Restrictions</h3>
+                <p>You may not:</p>
+                <ul>
+                    <li>Modify, copy, or create derivative works of our Service</li>
+                    <li>Use our trademarks, logos, or branding without permission</li>
+                    <li>Use any data mining or extraction methods</li>
+                </ul>
+            </div>
+            
+            <div class="terms-section" id="liability">
+                <h2>6. Limitation of Liability</h2>
+                <p>To the maximum extent permitted by law, CiviClinic shall not be liable for:</p>
+                <ul>
+                    <li>Any indirect, incidental, special, consequential, or punitive damages</li>
+                    <li>Loss of profits, data, use, goodwill, or other intangible losses</li>
+                    <li>Errors or inaccuracies in content</li>
+                    <li>Personal injury or property damage resulting from use of the Service</li>
+                </ul>
+                
+                <h3>Medical Services Disclaimer</h3>
+                <p>CiviClinic does not provide medical services. Healthcare providers using our platform are independent practitioners, and we are not responsible for their professional services.</p>
+            </div>
+            
+            <div class="terms-section">
+                <h2>7. Governing Law and Dispute Resolution</h2>
+                <h3>Governing Law</h3>
+                <p>These Terms shall be governed by the laws of the State of Delaware, without regard to its conflict of law provisions.</p>
+                
+                <h3>Dispute Resolution</h3>
+                <p>Any disputes shall be resolved through binding arbitration in accordance with the American Arbitration Association's rules. Arbitration shall take place in Wilmington, Delaware.</p>
+                
+                <div class="notice">
+                    <strong>Class Action Waiver:</strong> You agree to resolve disputes on an individual basis and waive any right to participate in class actions.
+                </div>
+            </div>
+            
+            <div class="terms-section">
+                <h2>8. Changes to Terms</h2>
+                <p>We may modify these Terms at any time. We will notify you of significant changes through the Service or by email. Your continued use after changes constitutes acceptance.</p>
+            </div>
+            
+            <div class="terms-section">
+                <h2>9. Contact Information</h2>
+                <p>For questions about these Terms, please contact us at:</p>
+                <p><strong>CiviClinic Legal Department</strong><br>
+                123 Healthcare Way<br>
+                Wilmington, DE 19801<br>
+                legal@civiclinic.com</p>
+            </div>
+            
+            <button onclick="location.href='/'" class="btn btn-home">
+                <i class="fas fa-home"></i> Back to Home
+            </button>
+        </div>
+    </div>
+    
+    <!-- Simplified Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-simple">
+                <a href="/" class="footer-logo">
+                    <i class="fas fa-heartbeat"></i>
+                    CiviClinic
+                </a>
+                <p class="footer-tagline">Ethical AI healthcare that prioritizes patient wellbeing, accessibility, and system efficiency.</p>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 CiviClinic. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

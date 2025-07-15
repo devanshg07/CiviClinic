@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Dashboard | CiviClinic</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+    <style>
+        :root {
+            --primary: #3A86FF;
+            --primary-dark: #2667CC;
+            --primary-light: #E6F0FF;
+            --secondary: #8338EC;
+            --accent: #FF006E;
+            --light: #F8F9FA;
+            --dark: #212529;
+            --gray: #6C757D;
+            --light-gray: #E9ECEF;
+            --success: #28A745;
+            --warning: #FFC107;
+            --danger: #DC3545;
+            --border-radius: 12px;
+            --box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--dark);
+            line-height: 1.6;
+            background-color: var(--light);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background-color: white;
+            box-shadow: var(--box-shadow);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            font-size: 1.8rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .nav-links a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        /* Dashboard Content */
+        .dashboard {
+            padding: 120px 0 60px;
+        }
+        
+        .dashboard-header {
+            margin-bottom: 40px;
+        }
+        
+        .dashboard-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .dashboard-header p {
+            color: var(--gray);
+        }
+        
+        /* Map Section */
+        .map-section {
+            margin-bottom: 60px;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .section-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        #patients-map {
+            height: 500px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            background-color: white;
+        }
+        
+        /* Patients Grid */
+        .patients-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        
+        .patient-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--box-shadow);
+            transition: transform 0.3s;
+        }
+        
+        .patient-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .patient-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .patient-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .patient-info h3 {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+        
+        .patient-info p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .patient-details {
+            margin-bottom: 20px;
+        }
+        
+        .patient-details p {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .patient-details i {
+            color: var(--primary);
+            width: 20px;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            font-size: 1rem;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--box-shadow);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: var(--box-shadow);
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard {
+                padding: 100px 0 40px;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            #patients-map {
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="/" class="logo">
+                    <i class="fas fa-heartbeat"></i>
+                    CiviClinic
+                </a>
+                
+                <div class="nav-links">
+                    <a href="/doctors/update">Update Profile</a>
+                </div>
+                
+                <div class="user-menu">
+                    <a href="/auth/logout" class="btn btn-outline">Log Out</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- Dashboard Content -->
+    <div class="dashboard">
+        <div class="container">
+            <div class="dashboard-header">
+                <h1>Welcome, Dr. {{ doctor.name }}!</h1>
+                <p>View and manage your prospective patients</p>
+            </div>
+            
+            <!-- Map Section -->
+            <div class="map-section">
+                <div class="section-header">
+                    <h2>Patients Near You</h2>
+                </div>
+                
+                <div id="patients-map"></div>
+            </div>
+            
+            <!-- Patients Grid -->
+            <div class="patients-grid">
+                {% for patient in patients %}
+                <div class="patient-card">
+                    <div class="patient-header">
+                        <div class="patient-avatar">
+                            {{ patient.name[0] }}
+                        </div>
+                        <div class="patient-info">
+                            <h3>{{ patient.name }}</h3>
+                            <p>{{ patient.age }} years old</p>
+                        </div>
+                    </div>
+                    
+                    <div class="patient-details">
+                        <p><i class="fas fa-map-marker-alt"></i> {{ patient.location }}</p>
+                        <p><i class="fas fa-phone"></i> {{ patient.phoneNumber }}</p>
+                        <p><i class="fas fa-envelope"></i> {{ patient.emailaddress }}</p>
+                        <p><i class="fas fa-heartbeat"></i> {{ patient.condition }}</p>
+                    </div>
+                    
+                    <a href="/doctors/patient/{{ patient.id }}" class="btn btn-primary" style="width: 100%;">View Details</a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script>
+        // Initialize map
+        const map = L.map('patients-map').setView([43.6532, -79.3832], 13);
+        
+        // Add tile layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+        
+        // Get doctor's location
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const doctorLat = position.coords.latitude;
+                    const doctorLng = position.coords.longitude;
+                    
+                    // Center map on doctor's location
+                    map.setView([doctorLat, doctorLng], 13);
+                    
+                    // Add doctor marker
+                    L.marker([doctorLat, doctorLng], {
+                        icon: L.divIcon({
+                            className: 'doctor-location-marker',
+                            html: '<div style="background-color: var(--primary); width: 20px; height: 20px; border-radius: 50%; border: 3px solid white;"></div>',
+                            iconSize: [20, 20]
+                        })
+                    }).addTo(map)
+                    .bindPopup('Your Location')
+                    .openPopup();
+                    
+                    // Add patient markers
+                    const patients = {{ patients|tojson }};
+                    patients.forEach(patient => {
+                        L.marker([patient.lat, patient.lng], {
+                            icon: L.divIcon({
+                                className: 'patient-marker',
+                                html: '<div style="background-color: var(--accent); width: 16px; height: 16px; border-radius: 50%; border: 2px solid white;"></div>',
+                                iconSize: [16, 16]
+                            })
+                        }).addTo(map)
+                        .bindPopup(`
+                            <div class="patient-info-window">
+                                <h3>${patient.name}</h3>
+                                <p><strong>Age:</strong> ${patient.age}</p>
+                                <p><strong>Condition:</strong> ${patient.condition}</p>
+                                <a href="/doctors/patient/${patient.id}">View Details</a>
+                            </div>
+                        `);
+                    });
+                },
+                (error) => {
+                    console.error("Error getting location:", error);
+                }
+            );
+        }
+    </script>
+</body>
+</html> 

@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Dashboard | CiviClinic</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+    <style>
+        :root {
+            --primary: #3A86FF;
+            --primary-dark: #2667CC;
+            --primary-light: #E6F0FF;
+            --secondary: #8338EC;
+            --accent: #FF006E;
+            --light: #F8F9FA;
+            --dark: #212529;
+            --gray: #6C757D;
+            --light-gray: #E9ECEF;
+            --success: #28A745;
+            --warning: #FFC107;
+            --danger: #DC3545;
+            --border-radius: 12px;
+            --box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --box-shadow-lg: 0 15px 50px rgba(0,0,0,0.12);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--dark);
+            line-height: 1.6;
+            background-color: var(--light);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background-color: white;
+            box-shadow: var(--box-shadow);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            font-size: 1.8rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .nav-links a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        /* Dashboard Content */
+        .dashboard {
+            padding: 120px 0 60px;
+        }
+        
+        .dashboard-header {
+            margin-bottom: 40px;
+        }
+        
+        .dashboard-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .dashboard-header p {
+            color: var(--gray);
+        }
+        
+        /* Map Section */
+        .map-section {
+            margin-bottom: 60px;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .section-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        #doctor-map {
+            height: 500px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            background-color: white;
+        }
+        
+        .map-container {
+            position: relative;
+        }
+        
+        /* Doctor Info Window Styling */
+        .doctor-info-window {
+            padding: 10px;
+            min-width: 200px;
+        }
+        
+        .doctor-info-window h3 {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+            color: var(--primary);
+        }
+        
+        .doctor-info-window p {
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+        
+        .doctor-info-window a {
+            display: inline-block;
+            margin-top: 8px;
+            color: var(--primary);
+            font-weight: 500;
+            font-size: 0.9rem;
+            text-decoration: none;
+        }
+        
+        /* Diagnosis Tools */
+        .diagnosis-tools {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        
+        @media (max-width: 768px) {
+            .diagnosis-tools {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .tool-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .tool-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .tool-card h3 i {
+            color: var(--primary);
+        }
+        
+        .upload-area {
+            border: 2px dashed var(--light-gray);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .upload-area:hover {
+            border-color: var(--primary);
+            background-color: var(--primary-light);
+        }
+        
+        .upload-area i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .upload-area p {
+            color: var(--gray);
+        }
+        
+        #image-preview {
+            max-width: 100%;
+            max-height: 300px;
+            display: none;
+            margin: 0 auto 20px;
+            border-radius: var(--border-radius);
+        }
+        
+        .symptom-form textarea {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid var(--light-gray);
+            border-radius: var(--border-radius);
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            min-height: 150px;
+            margin-bottom: 20px;
+            resize: vertical;
+        }
+        
+        .symptom-form textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+        
+        /* Buttons */
+        .btn {
+            padding: 12px 25px;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            font-size: 1rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--box-shadow);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: var(--box-shadow);
+        }
+        
+        /* Results Section */
+        .results-section {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--box-shadow);
+            margin-top: 30px;
+            display: none;
+        }
+        
+        .results-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .results-content {
+            line-height: 1.8;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dashboard {
+                padding: 100px 0 40px;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            #doctor-map {
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="/" class="logo">
+                    <i class="fas fa-heartbeat"></i>
+                    CiviClinic
+                </a>
+                
+                <div class="nav-links">
+                    <a href="/doctors">Doctors</a>
+                </div>
+                
+                <div class="user-menu">
+                    <a href="/auth/logout" class="btn btn-outline">Log Out</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- Dashboard Content -->
+    <div class="dashboard">
+        <div class="container">
+            <div class="dashboard-header">
+                <h1>Welcome back!</h1>
+                <p>Here's what's happening with your health today</p>
+            </div>
+            
+            <!-- Map Section -->
+            <div class="map-section">
+                <div class="section-header">
+                    <h2>Doctors Near You</h2>
+                </div>
+                
+                <div class="map-container">
+                    <div id="doctor-map"></div>
+                </div>
+            </div>
+            
+            <!-- Diagnosis Tools -->
+            <div class="diagnosis-tools">
+                <!-- Image Scan Tool -->
+                <div class="tool-card">
+                    <h3><i class="fas fa-camera"></i> Scan Injury Image</h3>
+                    <div class="upload-area" id="upload-area">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Click to upload or drag and drop an image of your injury</p>
+                        <input type="file" id="image-upload" accept="image/*" style="display: none;">
+                    </div>
+                    <img id="image-preview" alt="Preview of uploaded injury">
+                    <button class="btn btn-primary" id="analyze-image" style="width: 100%;">Analyze Image</button>
+                    
+                    <div class="results-section" id="image-results">
+                        <h3>Analysis Results</h3>
+                        <div class="results-content" id="image-results-content">
+                            <!-- Results will be populated here -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Symptom Checker -->
+                <div class="tool-card">
+                    <h3><i class="fas fa-comment-medical"></i> Symptom Checker</h3>
+                    <form class="symptom-form">
+                        <textarea placeholder="Describe your symptoms (e.g., headache, fever, nausea...)"></textarea>
+                        <button type="button" class="btn btn-primary" id="analyze-symptoms" style="width: 100%;">Get Diagnosis</button>
+                    </form>
+                    
+                    <div class="results-section" id="symptom-results">
+                        <h3>Diagnosis Results</h3>
+                        <div class="results-content" id="symptom-results-content">
+                            <!-- Results will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script>
+        // Initialize map
+        const map = L.map('doctor-map').setView([43.6532, -79.3832], 13); // Default to Toronto
+        
+        // Add tile layer (OpenStreetMap)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+        
+        // Get user's current location
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const userLat = position.coords.latitude;
+                    const userLng = position.coords.longitude;
+                    
+                    // Center map on user's location
+                    map.setView([userLat, userLng], 13);
+                    
+                    // Add user marker
+                    L.marker([userLat, userLng], {
+                        icon: L.divIcon({
+                            className: 'user-location-marker',
+                            html: '<div style="background-color: var(--primary); width: 20px; height: 20px; border-radius: 50%; border: 3px solid white;"></div>',
+                            iconSize: [20, 20]
+                        })
+                    }).addTo(map)
+                    .bindPopup('Your Location')
+                    .openPopup();
+                    
+                    // Load nearby doctors
+                    loadNearbyDoctors(userLat, userLng);
+                },
+                (error) => {
+                    console.error("Error getting location:", error);
+                    // Try to get location from IP
+                    fetch('https://ipapi.co/json/')
+                        .then(response => response.json())
+                        .then(data => {
+                            const userLat = data.latitude;
+                            const userLng = data.longitude;
+                            
+                            // Center map on IP-based location
+                            map.setView([userLat, userLng], 13);
+                            
+                            // Add user marker
+                            L.marker([userLat, userLng], {
+                                icon: L.divIcon({
+                                    className: 'user-location-marker',
+                                    html: '<div style="background-color: var(--primary); width: 20px; height: 20px; border-radius: 50%; border: 3px solid white;"></div>',
+                                    iconSize: [20, 20]
+                                })
+                            }).addTo(map)
+                            .bindPopup('Your Location (IP-based)')
+                            .openPopup();
+                            
+                            // Load nearby doctors
+                            loadNearbyDoctors(userLat, userLng);
+                        })
+                        .catch(error => {
+                            console.error("Error getting IP location:", error);
+                            // Default to Toronto if all location methods fail
+                            loadNearbyDoctors(43.6532, -79.3832);
+                        });
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 5000,
+                    maximumAge: 0
+                }
+            );
+        } else {
+            console.log("Geolocation is not supported by this browser.");
+            // Try IP-based location
+            fetch('https://ipapi.co/json/')
+                .then(response => response.json())
+                .then(data => {
+                    const userLat = data.latitude;
+                    const userLng = data.longitude;
+                    loadNearbyDoctors(userLat, userLng);
+                })
+                .catch(error => {
+                    console.error("Error getting IP location:", error);
+                    // Default to Toronto if all location methods fail
+                    loadNearbyDoctors(43.6532, -79.3832);
+                });
+        }
+        
+        // Function to load nearby doctors (this would be populated from your Flask backend)
+        function loadNearbyDoctors(lat, lng) {
+            // This data would come from your Flask route
+            const doctors = [
+                {
+                    id: 1,
+                    name: "Dr. Sarah Johnson",
+                    specialty: "Cardiologist",
+                    address: "123 Medical Drive, Toronto",
+                    distance: "0.5 km",
+                    rating: "4.8",
+                    lat: lat + 0.005,
+                    lng: lng + 0.005,
+                    phone: "(416) 555-1234",
+                    bio: "Board certified cardiologist with 10 years of experience."
+                },
+                {
+                    id: 2,
+                    name: "Dr. Michael Chen",
+                    specialty: "Dermatologist",
+                    address: "456 Health Street, Toronto",
+                    distance: "1.2 km",
+                    rating: "4.6",
+                    lat: lat + 0.003,
+                    lng: lng - 0.007,
+                    phone: "(416) 555-5678",
+                    bio: "Specializes in skin conditions and cosmetic dermatology."
+                },
+                {
+                    id: 3,
+                    name: "Dr. Emily Rodriguez",
+                    specialty: "General Practitioner",
+                    address: "789 Wellness Avenue, Toronto",
+                    distance: "0.8 km",
+                    rating: "4.9",
+                    lat: lat - 0.006,
+                    lng: lng + 0.002,
+                    phone: "(416) 555-9012",
+                    bio: "Family physician with a focus on preventive care."
+                }
+            ];
+            
+            // Add markers for each doctor
+            doctors.forEach(doctor => {
+                const marker = L.marker([doctor.lat, doctor.lng], {
+                    icon: L.divIcon({
+                        className: 'doctor-marker',
+                        html: '<div style="background-color: var(--accent); width: 16px; height: 16px; border-radius: 50%; border: 2px solid white;"></div>',
+                        iconSize: [16, 16]
+                    })
+                }).addTo(map);
+                
+                // Create popup content
+                const popupContent = `
+                    <div class="doctor-info-window">
+                        <h3>${doctor.name}</h3>
+                        <p><strong>Specialty:</strong> ${doctor.specialty}</p>
+                        <p><strong>Distance:</strong> ${doctor.distance}</p>
+                        <p><strong>Rating:</strong> ${doctor.rating}/5</p>
+                        <a href="/doctor/${doctor.id}">View Profile</a>
+                    </div>
+                `;
+                
+                marker.bindPopup(popupContent);
+            });
+        }
+        
+        // Image upload functionality
+        const uploadArea = document.getElementById('upload-area');
+        const imageUpload = document.getElementById('image-upload');
+        const imagePreview = document.getElementById('image-preview');
+        const analyzeImageBtn = document.getElementById('analyze-image');
+        const imageResults = document.getElementById('image-results');
+        const imageResultsContent = document.getElementById('image-results-content');
+        
+        uploadArea.addEventListener('click', () => {
+            imageUpload.click();
+        });
+        
+        imageUpload.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    imagePreview.src = event.target.result;
+                    imagePreview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        analyzeImageBtn.addEventListener('click', () => {
+            if (!imageUpload.files[0]) {
+                alert('Please upload an image first');
+                return;
+            }
+            
+            // Simulate analysis (in a real app, this would call your Flask backend)
+            imageResultsContent.innerHTML = `
+                <p><strong>Condition:</strong> Mild bruising detected</p>
+                <p><strong>Recommendation:</strong> Apply ice for 15-20 minutes every hour. If pain persists for more than 48 hours or swelling increases, consult a doctor.</p>
+                <p><strong>Suggested Doctors:</strong> <a href="#">Dr. Michael Chen (Dermatologist)</a></p>
+            `;
+            imageResults.style.display = 'block';
+        });
+        
+        // Symptom checker functionality
+        const analyzeSymptomsBtn = document.getElementById('analyze-symptoms');
+        const symptomResults = document.getElementById('symptom-results');
+        const symptomResultsContent = document.getElementById('symptom-results-content');
+        const symptomTextarea = document.querySelector('.symptom-form textarea');
+        
+        analyzeSymptomsBtn.addEventListener('click', async () => {
+            if (!symptomTextarea.value.trim()) {
+                alert('Please describe your symptoms');
+                return;
+            }
+            
+            // Show loading state
+            analyzeSymptomsBtn.disabled = true;
+            analyzeSymptomsBtn.textContent = 'Analyzing...';
+            symptomResultsContent.innerHTML = `
+                <div class="loading">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Analyzing your symptoms...</p>
+                </div>
+            `;
+            symptomResults.style.display = 'block';
+            
+            try {
+                // Get user's location with fallback
+                let location = "";
+                try {
+                    if (navigator.geolocation) {
+                        const position = await new Promise((resolve, reject) => {
+                            navigator.geolocation.getCurrentPosition(
+                                resolve,
+                                reject,
+                                {
+                                    enableHighAccuracy: true,
+                                    timeout: 5000,
+                                    maximumAge: 0
+                                }
+                            );
+                        });
+                        
+                        // Reverse geocode to get city name
+                        const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${position.coords.latitude}&lon=${position.coords.longitude}`);
+                        const data = await response.json();
+                        location = data.address.city || data.address.town || data.address.state || "";
+                    }
+                } catch (geoError) {
+                    console.log("Geolocation error:", geoError);
+                    // Try IP-based location as fallback
+                    try {
+                        const ipResponse = await fetch('https://ipapi.co/json/');
+                        const ipData = await ipResponse.json();
+                        location = ipData.city || ipData.region || "";
+                    } catch (ipError) {
+                        console.log("IP location error:", ipError);
+                        // Continue without location
+                    }
+                }
+                
+                const response = await fetch('/analyze-symptoms', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        symptoms: symptomTextarea.value.trim(),
+                        location: location
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // Create helplines section
+                    let helplinesHtml = '';
+                    if (data.helplines) {
+                        helplinesHtml = `
+                            <div class="helplines-section">
+                                <h4>Emergency Helplines</h4>
+                                ${!location ? '<p class="location-note"><i class="fas fa-info-circle"></i> Showing default Canadian helplines. Enable location services for region-specific numbers.</p>' : ''}
+                                <div class="helplines-grid">
+                                    ${Object.entries(data.helplines).map(([key, value]) => `
+                                        <div class="helpline-card">
+                                            <h5>${key.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}</h5>
+                                            <a href="tel:${value}" class="helpline-number">${value}</a>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        `;
+                    }
+                    
+                    symptomResultsContent.innerHTML = data.analysis + helplinesHtml;
+                } else {
+                    throw new Error(data.error || 'Failed to analyze symptoms');
+                }
+            } catch (error) {
+                symptomResultsContent.innerHTML = `
+                    <div class="error-message">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <p>${error.message}</p>
+                        <p class="error-note">Please try again later or consult a healthcare professional.</p>
+                    </div>
+                `;
+            } finally {
+                // Reset button state
+                analyzeSymptomsBtn.disabled = false;
+                analyzeSymptomsBtn.textContent = 'Get Diagnosis';
+            }
+        });
+        
+        // Add styles for helplines
+        const style = document.createElement('style');
+        style.textContent = `
+            .helplines-section {
+                margin-top: 30px;
+                padding-top: 20px;
+                border-top: 1px solid var(--light-gray);
+            }
+            
+            .helplines-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 20px;
+                margin-top: 15px;
+            }
+            
+            .helpline-card {
+                background-color: var(--primary-light);
+                padding: 15px;
+                border-radius: var(--border-radius);
+                text-align: center;
+            }
+            
+            .helpline-card h5 {
+                color: var(--primary);
+                margin-bottom: 10px;
+                font-size: 1rem;
+            }
+            
+            .helpline-number {
+                display: block;
+                color: var(--dark);
+                font-size: 1.1rem;
+                font-weight: 600;
+                text-decoration: none;
+                padding: 8px;
+                background-color: white;
+                border-radius: var(--border-radius);
+                transition: all 0.3s;
+            }
+            
+            .helpline-number:hover {
+                background-color: var(--primary);
+                color: white;
+                transform: translateY(-2px);
+            }
+            
+            .location-note {
+                background-color: var(--primary-light);
+                color: var(--primary);
+                padding: 10px 15px;
+                border-radius: var(--border-radius);
+                margin-bottom: 15px;
+                font-size: 0.9rem;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+            
+            .location-note i {
+                font-size: 1.1rem;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

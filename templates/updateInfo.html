@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Doctor Information | CiviClinic</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3A86FF;
+            --primary-dark: #2667CC;
+            --primary-light: #E6F0FF;
+            --secondary: #8338EC;
+            --accent: #FF006E;
+            --light: #F8F9FA;
+            --dark: #212529;
+            --gray: #6C757D;
+            --light-gray: #E9ECEF;
+            --success: #28A745;
+            --warning: #FFC107;
+            --danger: #DC3545;
+            --border-radius: 12px;
+            --box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--dark);
+            line-height: 1.6;
+            background-color: var(--light);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background-color: white;
+            box-shadow: var(--box-shadow);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            font-size: 1.8rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .nav-links a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        /* Form Container */
+        .form-container {
+            padding: 150px 0 80px;
+        }
+        
+        .form-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .form-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .form-header p {
+            color: var(--gray);
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        /* Doctor Form */
+        .doctor-form {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 40px;
+            box-shadow: var(--box-shadow);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .form-section {
+            margin-bottom: 30px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .form-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .form-section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .section-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.2rem;
+            margin-right: 15px;
+        }
+        
+        .form-section h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--light-gray);
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: all 0.3s;
+            background-color: white;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 40px;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            font-size: 1rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--box-shadow);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: var(--box-shadow);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .form-container {
+                padding: 120px 0 60px;
+            }
+            
+            .doctor-form {
+                padding: 30px;
+            }
+            
+            .form-header h1 {
+                font-size: 2rem;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="/" class="logo">
+                    <i class="fas fa-heartbeat"></i>
+                    CiviClinic
+                </a>
+                
+                <div class="nav-links">
+                    <a href="/dashboard">Dashboard</a>
+                    <a href="/profile">Profile</a>
+                    <a href="/patients">Patients</a>
+                </div>
+                
+                <div class="auth-buttons">
+                    <button onclick="location.href='/logout'" class="btn btn-outline">Log Out</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- Form Container -->
+    <div class="form-container">
+        <div class="container">
+            <div class="form-header">
+                <h1>Update Your Professional Information</h1>
+                <p>Complete your profile to help patients find and connect with you. All fields are required unless marked optional.</p>
+            </div>
+            
+            <form class="doctor-form" action="/doctors/update" method="POST">
+                <!-- Professional Information Section -->
+                <div class="form-section">
+                    <div class="form-section-header">
+                        <div class="section-icon">
+                            <i class="fas fa-user-md"></i>
+                        </div>
+                        <h2>Professional Information</h2>
+                    </div>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="specialty">Specialty</label>
+                            <select name="specialty" id="specialty" required>
+                                <option value="">Select your specialty</option>
+                                <option value="Cardiology">Cardiology</option>
+                                <option value="Dermatology">Dermatology</option>
+                                <option value="Endocrinology">Endocrinology</option>
+                                <option value="Family Medicine">Family Medicine</option>
+                                <option value="Gastroenterology">Gastroenterology</option>
+                                <option value="Neurology">Neurology</option>
+                                <option value="Obstetrics/Gynecology">Obstetrics/Gynecology</option>
+                                <option value="Oncology">Oncology</option>
+                                <option value="Ophthalmology">Ophthalmology</option>
+                                <option value="Pediatrics">Pediatrics</option>
+                                <option value="Psychiatry">Psychiatry</option>
+                                <option value="Radiology">Radiology</option>
+                                <option value="Surgery">Surgery</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="license_number">License Number</label>
+                            <input type="text" name="license_number" id="license_number" required placeholder="Enter your medical license number">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="years_experience">Years of Experience</label>
+                            <input type="number" name="years_experience" id="years_experience" min="0" max="60" required placeholder="Enter years of experience">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="hospital_affiliation">Hospital Affiliation</label>
+                            <input type="text" name="hospital_affiliation" id="hospital_affiliation" required placeholder="Enter hospital or clinic name">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Education & Credentials Section -->
+                <div class="form-section">
+                    <div class="form-section-header">
+                        <div class="section-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <h2>Education & Credentials</h2>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="degrees_certifications">Degrees & Certifications</label>
+                        <textarea name="degrees_certifications" id="degrees_certifications" required placeholder="List your degrees, certifications, and any special training (e.g., MD, PhD, Board Certification in...)"></textarea>
+                    </div>
+                </div>
+                
+                <!-- Location & Contact Section -->
+                <div class="form-section">
+                    <div class="form-section-header">
+                        <div class="section-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <h2>Location & Contact</h2>
+                    </div>
+                    
+                        <div class="form-grid">
+                            <div class="form-group">
+                            <label for="location">Location</label>
+                            <input id="cityInput" name="location" type="text" placeholder="Enter your city" list="citySuggestions" required>
+                            <datalist id="citySuggestions"></datalist>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="address">Practice Address</label>
+                            <input type="text" name="address" id="address" required placeholder="Enter your practice address">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phoneNumber">Phone Number</label>
+                            <input type="tel" name="phoneNumber" id="phoneNumber" required placeholder="Enter your practice phone number">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Additional Information Section -->
+                <div class="form-section">
+                    <div class="form-section-header">
+                        <div class="section-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <h2>Additional Information</h2>
+                    </div>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="languages_spoken">Languages Spoken</label>
+                            <input type="text" name="languages_spoken" id="languages_spoken" required placeholder="List languages separated by commas (e.g., English, French, Spanish)">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="bio">Professional Bio</label>
+                        <textarea name="bio" id="bio" required placeholder="Tell patients about your approach to care, special interests, etc. (200-500 words)"></textarea>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" onclick="location.href='/dashboard'" class="btn btn-outline">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+<script>
+  const input = document.getElementById('cityInput');
+
+  input.addEventListener('input', async () => {
+    const query = input.value;
+    if (query.length < 2) return;
+
+    const res = await fetch(`/autocomplete/cities?q=${encodeURIComponent(query)}`);
+    const cities = await res.json();
+
+    const datalist = document.getElementById('citySuggestions');
+    datalist.innerHTML = '';
+
+    cities.forEach(city => {
+      const option = document.createElement('option');
+      option.value = city;
+      datalist.appendChild(option);
+    });
+  });
+</script>
+</html>

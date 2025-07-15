@@ -1,0 +1,6 @@
+/flask_session
+/.venv
+/__pycache__
+users.db
+doctors.db
+.env
